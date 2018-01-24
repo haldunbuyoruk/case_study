@@ -24,7 +24,8 @@ class Http {
     }
 
 
-    public static function get_web_page( $url,$headers,$post = false){
+    public static function get_web_page( $url,$post = false){
+        $headers = array('Accept: application/json','Content-Type: application/json','X-EPA-Request-Id:'.self::generateRandomString());
         $options = array(
             CURLOPT_RETURNTRANSFER => true,     // return web page
             CURLOPT_HEADER         => false,
@@ -50,7 +51,13 @@ class Http {
         $header['errno']   = $err;
         $header['errmsg']  = $errmsg;
         $header['content'] = $content;
-        return $header;
+        return $header['content'];
+    }
+
+    public static function response($data){
+        http_response_code($data->err_code);
+        echo $data->err_msg;
+        die;
     }
 }
 
